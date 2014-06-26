@@ -11,9 +11,9 @@ Unless explicitly contradicted below, assume that all of Apple's guidelines appl
 
  * All method declarations should be documented.
  * Comments should be hard-wrapped at 80 characters.
- * Comments should be [Tomdoc](http://tomdoc.org/)-style.
+ * Comments should be [appledoc](http://nshipster.com/documentation/)-style.
  * Document whether object parameters allow `nil` as a value.
- * Use `#pragma mark`s to categorize methods into functional groupings and protocol implementations, following this general structure:
+ * Use `#pragma mark -`s to categorize methods into functional groupings and protocol implementations (note that all methods inherited from the superclass and properties are not grouped with `-`; all other groupings should include it.), following this general structure:
 
 ```objc
 #pragma mark Properties
@@ -31,17 +31,17 @@ Unless explicitly contradicted below, assume that all of Apple's guidelines appl
 
 - (void)drawRect:(CGRect) {}
 
-#pragma mark Another functional grouping
+#pragma mark - Another functional grouping
 
-#pragma mark GHSuperclass
+#pragma mark - GHSuperclass
 
 - (void)someOverriddenMethod {}
 
-#pragma mark NSCopying
+#pragma mark - NSCopying
 
 - (id)copyWithZone:(NSZone *)zone {}
 
-#pragma mark NSObject
+#pragma mark - NSObject
 
 - (NSString *)description {}
 ```
@@ -128,7 +128,7 @@ if (something == nil) {
 
  * Don't use exceptions for flow control.
  * Use exceptions only to indicate programmer error.
- * To indicate errors, use an `NSError **` argument or send an error on a [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) signal.
+ * To indicate errors, use an `NSError **` argument or send an error on a [ReactiveCocoa](https://github.com/ReactiveCocoa/ReactiveCocoa) signal (if applicable).
 
 ## Blocks
 
@@ -149,12 +149,12 @@ id (^blockName2)(id) = ^ id (id args) {
 
 ## Literals
 
- * Avoid making numbers a specific type unless necessary (for example, prefer `5` to `5.0`, and `5.3` to `5.3f`).
- * The contents of array and dictionary literals should have a space on both sides.
+ * The contents of array literals shouldn't have a space on either side.
+ * The contents of dictionary literals should have a space on both sides.
  * Dictionary literals should have no space between the key and the colon, and a single space between colon and value.
 
 ``` objc
-NSArray *theStuff = @[ @1, @2, @3 ];
+NSArray *theStuff = @[@1, @2, @3];
 
 NSDictionary *keyedStuff = @{ GHDidCreateStyleGuide: @YES };
 ```
@@ -182,3 +182,68 @@ NSDictionary *keyedStuff = @{
  * Categories should be named for the sort of functionality they provide. Don't create umbrella categories.
  * Category methods should always be prefixed.
  * If you need to expose private methods for subclasses or unit testing, create a class extension named `Class+Private`.
+
+## Constants
+
+ * Constants should always be declared on the top of the file (on the `.m` if is used only in the implementation; on the `.h` if used as an identifier or notification, etc).
+ * All constants should be prefixed with the lowercase letter `k` and the "global" classes prefix. e.g.:
+ 
+``` objc
+/// Assume the global prefix is LN
+NSString *const kLNConstant;
+```
+ 
+ * All constants should have the `const` keyword after its type; if its an object it shouldn't be any empty spaces between the `const` and the `*` as follows:
+ 
+``` objc
+NSString *const kLNConstantString = @"value";
+ 
+CGFloat const kLHConstantHeight = 50.0f;
+```
+ 
+ * For constants used in places other than the class defining they should be declared as `extern` on the `.h` and initialised on the `.m` as follows:
+ 
+``` objc
+/// Interface.h
+
+extern NSString const* kLHReloadDataNotification;
+
+
+
+/// Implementation.m
+
+NSString const* kLHReloadDataNotification = @"LHReloadDataNotification";
+
+```
+
+## Imports
+
+ * For all "native" imports prefer the use of modules instead of `.h` files. e.g.:
+
+``` objc
+@import UIKit;
+```
+
+ * Separate all headers logically with comments to make it easier to read the code. e.g.:
+
+``` objc
+// Header
+#import "LNHeader.h"
+
+// Models
+#import "DataModels.h"
+
+// Utilities
+#import "LNNetwork.h"
+
+// Native Frameworks
+@import Social;
+@import Accounts;
+
+// 3rd Party Frameworks
+#import <AFNetworking/AFNetworking.h>
+```
+
+ * When importing 3rd party frameworks (either via static libraries or [CocoaPods](http://cocoapods.org/)) include the notation of `<LibraryName/HeaderFile.h>`
+
+ 
