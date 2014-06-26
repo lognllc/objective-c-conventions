@@ -33,7 +33,7 @@ Unless explicitly contradicted below, assume that all of Apple's guidelines appl
 
 #pragma mark - Another functional grouping
 
-#pragma mark - GHSuperclass
+#pragma mark - LNSuperclass
 
 - (void)someOverriddenMethod {}
 
@@ -66,7 +66,7 @@ Unless explicitly contradicted below, assume that all of Apple's guidelines appl
  * C function declarations should have no space before the opening parenthesis, and should be namespaced just like a class.
 
 ```objc
-void GHAwesomeFunction(BOOL hasSomeArgs);
+void LNAwesomeFunction(BOOL hasSomeArgs);
 ```
 
  * Constructors should generally return [`instancetype`](http://clang.llvm.org/docs/LanguageExtensions.html#related-result-types) rather than `id`.
@@ -156,7 +156,7 @@ id (^blockName2)(id) = ^ id (id args) {
 ``` objc
 NSArray *theStuff = @[@1, @2, @3];
 
-NSDictionary *keyedStuff = @{ GHDidCreateStyleGuide: @YES };
+NSDictionary *keyedStuff = @{ LNDidCreateStyleGuide: @YES };
 ```
 
  * Longer or more complex literals should be split over multiple lines (optionally with a terminating comma):
