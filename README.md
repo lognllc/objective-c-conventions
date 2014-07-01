@@ -215,6 +215,7 @@ extern NSString const* kLHReloadDataNotification;
 NSString const* kLHReloadDataNotification = @"LHReloadDataNotification";
 
 ```
+ * Never use `#define` instead of constants; this declarations do not add type check at compile time (the compiler does a "literal" replace of whatever is on the define).
 
 ## Imports
 
