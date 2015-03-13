@@ -56,6 +56,16 @@ Unless explicitly contradicted below, assume that all of Apple's guidelines appl
  * Don't use `@synthesize` unless the compiler requires it. Note that optional properties in protocols must be explicitly synthesized in order to exist.
  * Declare properties `copy` if they return immutable objects and aren't ever mutated in the implementation. `strong` should only be used when exposing a mutable object, or an object that does not conform to `<NSCopying>`.
  * Instance variables should be prefixed with an underscore (just like when implicitly synthesized).
+ * Prefix private method names so that they are easily distinguished from public methods, our suggestions is to prefix with p_, where p means private, followed by the name of the method with camel case for example: 
+ 
+```objc
+
+#pragma mark - Private Methods
+
+- (void) p_calculateAnualBonus {} 
+
+```
+
  * Don't put a space between an object type and the protocol it conforms to.
  
 ```objc
